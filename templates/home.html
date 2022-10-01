@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+{% block title %}Home{% endblock title %}
+{% block body %}
+<div class="alert alert-success alert-dismissible fade show" role="alert">
+    Hello! <strong style="text-transform: capitalize;">{{request.user.username}}</strong>.
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+<div class="container d-flex flex-row-reverse">
+    <form action="{% url 'crim:criminal_data' %}" method="post" enctype="multipart/form-data"> {% csrf_token %}
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+            data-bs-target="#staticBackdrop">Add Criminal Data</button>
+
+        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+            aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="staticBackdropLabel">Add Criminal</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="my-3 input-group">
+                            <input type="text" class="form-control" placeholder="Please enter criminal name" name="crim_name" />
+                        </div>
+                        <div class="my-3 input-group">
+                            <input type="text" class="form-control" placeholder="Please enter criminal age"
+                                name="crim_age" />
+                        </div>
+                        <div class="my-3 input-group">
+                            <input type="date" class="form-control" placeholder="Please enter crimnial date of birth"
+                                name="crim_dob" />
+                        </div>
+                        <div class="my-3 input-group">
+                            <input type="text" class="form-control" placeholder="Please enter crimnial's crime"
+                                name="crime" />
+                        </div>
+                        <div class="form-group">
+                            <input type="file" class="form-control" id="exampleFormControlFile1" name="profile_pic">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" name="encode" class="btn btn-primary">Submit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="container my-3">
+    <div class="list-group">
+        {% if crim_data|length > 0 %}
+        {% for i in crim_data %}
+        <a href="#" class="list-group-item list-group-item-action flex-column align-items-start my-1">
+                <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1">Name: {{i.0}}</h5>
+                    <div>
+                        <span>Age: {{i.1}}</span>
+                    </div>
+                </div>
+                <div>
+                    <p>DOB: {{i.2}} &nbsp;&nbsp;&nbsp;&nbsp; Created By: {{i.4}}</p>
+                </div>
+                <p class="mb-1">Crime: {{i.3}}</p>
+            </a>
+        {% endfor %}
+        {% else %}
+        <h4 class="text-center">No rows to show!</h4>
+        {% endif %}
+    </div>
+</div>
+<script>
+    {% if con %}
+    alert('Success!');
+    document.location = '/home/';
+    {% endif %}
+
+    function attendance(lec) {
+        console.log(lec)
+        document.location = `/student_face_recognition/?lecSche=${lec}`;
+    }
+</script>
+
+
+{% endblock body %}
